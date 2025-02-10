@@ -1,61 +1,15 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="chat.js"></script>
+    <title>Escolher Grupo</title>
 </head>
 <body>
-    <h1>Chat em Tempo Real</h1>
-
-    <h2 id="paticipantes">Participantes: </h2>
-
-    <div id="messages"></div>
-    <input type="text" id="messageInput" placeholder="Digite sua mensagem">
-    <button onclick="sendMessage()">Enviar</button>
-
-    <script>
-        const socket = new WebSocket('ws://127.0.0.1:3030');
-        const messagesDiv = document.getElementById('messages');
-        const participantesDiv = document.getElementById('paticipantes');
-
-        socket.onopen = () => {
-            console.log('Conectado ao servidor WebSocket');
-            messagesDiv.innerHTML += `<p>SERVIDOR: Seja bem vindo!</p>`;
-        };
-    
-        socket.onclose = () => {
-            console.log('fechado!');
-        }
-    
-        socket.onerror = (error) => {
-            console.log('Erro!', error);
-        }
-
-        socket.onmessage = (event) => {
-            let mensagem = JSON.parse(event.data);
-            console.log(`Mensagem: ${mensagem.message}`);
-
-            switch (mensagem.type) {
-                case 'message':
-                    messagesDiv.innerHTML += `<p>ELE: ${mensagem.message}</p>`;
-                    break;
-                case 'updateInterface':
-                    participantesDiv.innerHTML += mensagem.message;
-                    break;
-                default:
-                    messagesDiv.innerHTML += `<p>DESCONHECIDO: ${mensagem.message}</p>`;
-                    break;
-            }
-        };
-
-        function sendMessage() {
-            const input = document.getElementById('messageInput');
-            const message = input.value;
-            messagesDiv.innerHTML += `<p>VOCE: ${message}</p>`;
-            socket.send(message);
-            input.value = '';
-        }
-    </script>
+<h2>Escolha um Grupo</h2>
+    <a href="chat.html?group=grupo1">Entrar no Grupo 1</a><br>
+    <a href="chat.html?group=grupo2">Entrar no Grupo 2</a><br>
+    <a href="chat.html?group=grupo3">Entrar no Grupo 3</a>
 </body>
 </html>
