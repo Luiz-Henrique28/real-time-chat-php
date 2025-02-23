@@ -40,12 +40,20 @@ class ChatServer implements MessageComponentInterface
                 }
 
                 foreach ($this->groups[$groupId] as $client) {
-                    //if ($client !== $from) {
+
+                    $client->send(json_encode([
+                        'type' => 'updateInterface',
+                        'message' => $this->groups[$groupId]->count(),
+                    ]));
+
+                    if ($client !== $from) {
+
                         $client->send(json_encode([
-                            'type' => 'updateInterface',
-                            'message' => $this->groups[$groupId]->count(),
+                            'type' => 'globalMessage',
+                            'message' => "Usuário {$from->resourceId} entrou no grupo.",
                         ]));
-                    //}
+
+                    }
                 }
                 break;
 
@@ -54,6 +62,7 @@ class ChatServer implements MessageComponentInterface
                     if ($from !== $client) {
                         $client->send(json_encode([
                             'type' => 'message',
+                            'from' => $from->resourceId,
                             'message' => $data->message,
                         ]));
                     }

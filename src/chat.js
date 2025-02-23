@@ -1,4 +1,5 @@
 const socket = new WebSocket('ws://127.0.0.1:3030');
+//entender esse funcionamento: host.docker.internal
 const messagesDiv = document.getElementById('messages');
 const participantesDiv = document.getElementById('qtd-participantes');
 
@@ -23,15 +24,19 @@ socket.onerror = (error) => {
 
 socket.onmessage = (event) => {
     let mensagem = JSON.parse(event.data);
-    console.log(`Mensagem: ${mensagem.message}`);
+    console.log(`Mensagem de quem?: ${mensagem}`);
 
     switch (mensagem.type) {
         case 'message':
-            messagesDiv.innerHTML += `<p>ELE: ${mensagem.message}</p>`;
+            messagesDiv.innerHTML += `<p> user_${mensagem.from}: ${mensagem.message}</p>`;
             break;
         case 'updateInterface':
             console.log(participantesDiv);
             participantesDiv.innerHTML = mensagem.message;
+            break;
+        case 'globalMessage':
+            console.log(mensagem.message);
+            messagesDiv.innerHTML += `<p> Servidor: ${mensagem.message}</p>`;
             break;
         default:
             messagesDiv.innerHTML += `<p>DESCONHECIDO: ${mensagem.message}</p>`;
